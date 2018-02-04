@@ -4635,6 +4635,7 @@ GameObject:
   - component: {fileID: 642991661}
   - component: {fileID: 642991662}
   - component: {fileID: 642991663}
+  - component: {fileID: 642991664}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -4668,6 +4669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c277c5cfb5f024da9056a5c0e7a004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 3
 --- !u!114 &642991663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4679,7 +4681,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09585b73a56c46c409bc24187548c2b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  model: {fileID: 1387291034}
+--- !u!143 &642991664
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 642991660}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!4 &643980151 stripped
 Transform:
   m_PrefabParentObject: {fileID: 469056, guid: 28571dc7a9cf7834892025d98a1fbe6a, type: 2}
@@ -9212,7 +9231,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1284807322}
   m_LocalRotation: {x: 0.3127845, y: -0, z: -0, w: 0.9498242}
-  m_LocalPosition: {x: 0, y: 1.43, z: -2.32}
+  m_LocalPosition: {x: 0, y: 4.05, z: -1.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 642991661}
@@ -10084,6 +10103,11 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 469056, guid: 28571dc7a9cf7834892025d98a1fbe6a, type: 2}
   m_PrefabInternal: {fileID: 84627833}
+--- !u!1 &1387291034 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000013796193586, guid: 0f21afde7a41dfb4e930ca290ca46dee,
+    type: 2}
+  m_PrefabInternal: {fileID: 1474156525}
 --- !u!1001 &1388219864
 Prefab:
   m_ObjectHideFlags: 0

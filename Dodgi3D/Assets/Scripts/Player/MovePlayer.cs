@@ -7,13 +7,15 @@ public class MovePlayer : MonoBehaviour {
     public float speed = 10;
 
     private ModelPlayer model;
-    private Vector2 CurentDestination;
-    private Coroutine moving;
+    private Vector2 curentDestination;
+    private CharacterController controller;
 
     private void OnEnable()
     {
         InputHandler.OnFingerSwipe += Move;
+        curentDestination = new Vector3();
         model = GetComponent<ModelPlayer>();
+        controller = GetComponent<CharacterController>();
     }
 
     private void OnDisable()
@@ -23,25 +25,30 @@ public class MovePlayer : MonoBehaviour {
 
     public void Move(Vector2 bar)
     {
-        StopCoroutine(moving);
-        CurentDestination += bar;
-        moving = StartCoroutine(MovingCoroutine(CurentDestination));
-        transform.Translate(new Vector3(bar.x,0,bar.y));
+        StopAllCoroutines();
+        curentDestination += bar;
+        StartCoroutine(MovingCoroutine(curentDestination));
+        Debug.Log(curentDestination);
     }
 
     IEnumerator MovingCoroutine(Vector2 destination)
     {
         Vector3 destination3D = new Vector3(destination.x, 0, destination.y);
-        float dist = Vector3.Distance(transform.position, destination3D);
         model.StartMoving();
-        Vector3 moveVector = Vector3.ClampMagnitude(destination3D - transform.position,
-            dist>speed ? speed: dist);
+        model.model.transform.LookAt(destination3D);
+        Vector3 move = (destination3D - transform.position).normalized;
+        move = move * speed * Time.deltaTime;
+        //move = transform.TransformDirection(move);
+        controller.Move(move);
 
-        transform.Translate(moveVector);
         yield return new WaitForEndOfFrame();
-        if (Vector3.Distance(destination3D, transform.position) <= 0.01)
+
+        if ((transform.position - destination3D).magnitude < 0.1)
+        {
+            transform.position = destination3D;
             model.StopMoving();
+        }
         else
-            moving = StartCoroutine(MovingCoroutine(destination));
+            StartCoroutine(MovingCoroutine(destination));
     }
 }
