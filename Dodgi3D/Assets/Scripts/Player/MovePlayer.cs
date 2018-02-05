@@ -7,7 +7,7 @@ public class MovePlayer : MonoBehaviour {
     public float speed = 10;
 
     private ModelPlayer model;
-    private Vector2 curentDestination;
+    private Vector3 curentDestination;
     private CharacterController controller;
 
     private void OnEnable()
@@ -23,32 +23,65 @@ public class MovePlayer : MonoBehaviour {
         InputHandler.OnFingerSwipe -= Move;
     }
 
-    public void Move(Vector2 bar)
+    public void Move(Vector2 way)
     {
         StopAllCoroutines();
-        curentDestination += bar;
-        StartCoroutine(MovingCoroutine(curentDestination));
+        curentDestination += new Vector3(way.x,0,way.y);
         Debug.Log(curentDestination);
+        curentDestination = CalcalateDistinationWithColliders(curentDestination);
+        Debug.Log(curentDestination);
+        StartCoroutine(MovingCoroutine(curentDestination));
     }
 
-    IEnumerator MovingCoroutine(Vector2 destination)
+    IEnumerator MovingCoroutine(Vector3 destination)
     {
-        Vector3 destination3D = new Vector3(destination.x, 0, destination.y);
-        model.StartMoving();
-        model.model.transform.LookAt(destination3D);
-        Vector3 move = (destination3D - transform.position).normalized;
+              
+        model.model.transform.LookAt(destination);
+        Vector3 move = (destination - transform.position).normalized;
         move = move * speed * Time.deltaTime;
-        //move = transform.TransformDirection(move);
+               
         controller.Move(move);
+        model.StartMoving();
 
         yield return new WaitForEndOfFrame();
 
-        if ((transform.position - destination3D).magnitude < 0.1)
+        if ((transform.position - destination).magnitude < 0.1)
         {
-            transform.position = destination3D;
+            transform.position = destination;
             model.StopMoving();
         }
         else
             StartCoroutine(MovingCoroutine(destination));
     }
+
+    private Vector3 CalcalateDistinationWithColliders(Vector3 destination)
+    {
+        Vector3 path = destination - transform.position;
+        Ray ray = new Ray(transform.position, path.normalized);
+        //Debug.Log(path);
+        RaycastHit hit;
+        if(Physics.SphereCast(ray, 0.3f, out hit, path.magnitude))
+        {
+            Debug.Log("HIT!" + hit.point);
+            destination = ShortPath(destination, path);
+        }
+
+        return destination;
+    }
+
+    private Vector3 ShortPath(Vector3 destination, Vector3 path)
+    {
+        if(destination.x<transform.position.x)
+            destination.x += path.x != 0 ? 1 : 0;
+        else
+            destination.x -= path.x != 0 ? 1 : 0;
+
+        if (destination.z < transform.position.z)
+            destination.z += path.z != 0 ? 1 : 0;
+        else
+            destination.z -= path.z != 0 ? 1 : 0;
+        return destination;
+    }
 }
+
+

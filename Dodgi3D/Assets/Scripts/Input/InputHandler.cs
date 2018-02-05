@@ -41,7 +41,6 @@ public class InputHandler : MonoBehaviour {
     private Vector2 DirectionAlign(Vector2 direction)
     {
         Vector2 normDirection = direction.normalized;
-        Debug.Log("Swipe Delta" + normDirection.ToString());
         return new Vector2(OneDirectionAlign(normDirection.x),
                             OneDirectionAlign(normDirection.y));
     }
