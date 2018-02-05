@@ -27,21 +27,23 @@ public class MovePlayer : MonoBehaviour {
     {
         StopAllCoroutines();
         curentDestination += new Vector3(way.x,0,way.y);
-        Debug.Log(curentDestination);
+        model.model.transform.LookAt(curentDestination);
+
         curentDestination = CalcalateDistinationWithColliders(curentDestination);
         Debug.Log(curentDestination);
         StartCoroutine(MovingCoroutine(curentDestination));
     }
 
     IEnumerator MovingCoroutine(Vector3 destination)
-    {
-              
-        model.model.transform.LookAt(destination);
+    {     
         Vector3 move = (destination - transform.position).normalized;
         move = move * speed * Time.deltaTime;
-               
+        if(move.magnitude > 0)
+        {
+            model.StartMoving();
+        }
         controller.Move(move);
-        model.StartMoving();
+        
 
         yield return new WaitForEndOfFrame();
 
