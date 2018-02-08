@@ -26,7 +26,7 @@ public class MovePlayer : MonoBehaviour {
     public void Move(Vector2 way)
     {
         StopAllCoroutines();
-        curentDestination += new Vector3(way.x,0,way.y);
+        curentDestination += new Vector3(-way.y,0,way.x);
         model.model.transform.LookAt(curentDestination);
 
         curentDestination = CalcalateDistinationWithColliders(curentDestination);
